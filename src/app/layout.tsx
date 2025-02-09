@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import MSWWrapper from '@/components/MSWWrapper';
+import QueryProvider from '@/components/QueryProvider';
 
 import { initMsw } from '@/mocks';
 
@@ -30,7 +31,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <MSWWrapper>{children}</MSWWrapper>
+        <MSWWrapper>
+          <QueryProvider>{children}</QueryProvider>
+        </MSWWrapper>
       </body>
     </html>
   );
