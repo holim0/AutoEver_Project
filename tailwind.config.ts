@@ -8,6 +8,12 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        sm: { max: '743px' }, // 모바일 (max-width: 743px)
+        md: '744px', // 태블릿 (min-width: 744px) and (max-width: 1023px)
+        lg: '1024px', // 중간 크기 디바이스 (min-width: 1024px) and (max-width: 1439px)
+        xl: '1440px', // 데스크탑 (min-width: 1440px)
+      },
       colors: {
         red: '#ff0900',
         blue: '#4296e4',

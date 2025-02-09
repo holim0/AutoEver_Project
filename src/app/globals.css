@@ -20,6 +20,7 @@
 }
 
 :root {
+  --max-width: 1660px;
   --font-kia: 'Kia Signature Fix', Arial, Helvetica, sans-serif;
 }
 
@@ -278,8 +279,24 @@
   }
 }
 
+html {
+  height: 100%;
+}
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-kia);
+  height: 100%;
+  min-width: 360px;
+  margin: 0;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family:
+    Kia Signature Fix,
+    Arial,
+    sans-serif,
+    Hevetica;
+  color: var(--midnight-900);
 }
