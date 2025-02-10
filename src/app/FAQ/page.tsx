@@ -2,6 +2,7 @@ import Header from './_components/Header';
 import FAQContents from './_components/FAQContents';
 import ServiceContact from './_components/ServiceContact';
 import UsageProcessGuide from './_components/UsageProcessGuide';
+import ServiceAppInfo from './_components/ServiceAppInfo';
 
 const FAQPage = async () => {
   return (
@@ -18,6 +19,7 @@ const FAQPage = async () => {
           <FAQContents />
           <ServiceContact />
           <UsageProcessGuide />
+          <ServiceAppInfo />
         </div>
       </div>
     </main>
