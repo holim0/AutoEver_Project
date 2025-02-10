@@ -1,4 +1,5 @@
 import Header from './_components/Header';
+import FAQContents from './_components/FAQContents';
 
 const FAQPage = async () => {
   return (
@@ -12,6 +13,7 @@ const FAQPage = async () => {
               궁금하신 내용을 빠르게 찾아보세요.
             </em>
           </h1>
+          <FAQContents />
         </div>
       </div>
     </main>
