@@ -1,5 +1,5 @@
 import Header from './_components/Header';
-import FAQContents from './_components/FAQContents';
+import FAQContents from './_components/FAQ/FAQContents';
 import ServiceContact from './_components/ServiceContact';
 import UsageProcessGuide from './_components/UsageProcessGuide';
 import ServiceAppInfo from './_components/ServiceAppInfo';

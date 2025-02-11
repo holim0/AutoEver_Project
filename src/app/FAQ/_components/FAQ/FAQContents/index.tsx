@@ -11,7 +11,7 @@ import ResetIcon from '@/assets/ic_init.svg';
 import FAQList from '../FAQList';
 
 import useSearch from './hooks/useSearch';
-import NoData from '../NoData';
+import NoData from '../../NoData';
 
 import type { TAB } from './types';
 import FAQCategory from '../FAQCategory';
