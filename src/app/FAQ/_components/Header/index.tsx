@@ -26,8 +26,9 @@ const Header = () => {
       <div className="flex justify-between relative max-w-[var(--max-width)] h-[var(--header-height)] mx-auto">
         <Link className="flex items-center" href="https://wiblebiz.kia.com">
           <Image
-            className="w-[120px] h-[40px] lg:w-[160px] lg:h-full"
+            className="w-[120px] h-full lg:w-[160px] xl:w-[160px] sm:h-[40px]"
             src={WibleBizLogo}
+            sizes="fill"
             alt="WibleBIZ Logo"
             priority
           />
