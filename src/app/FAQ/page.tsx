@@ -3,6 +3,7 @@ import FAQContents from './_components/FAQContents';
 import ServiceContact from './_components/ServiceContact';
 import UsageProcessGuide from './_components/UsageProcessGuide';
 import ServiceAppInfo from './_components/ServiceAppInfo';
+import Footer from './_components/Footer';
 
 const FAQPage = async () => {
   return (
@@ -22,6 +23,7 @@ const FAQPage = async () => {
           <ServiceAppInfo />
         </div>
       </div>
+      <Footer />
     </main>
   );
 };
