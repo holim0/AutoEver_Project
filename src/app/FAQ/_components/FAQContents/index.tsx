@@ -16,46 +16,44 @@ import NoData from '../NoData';
 import type { TAB } from './types';
 
 const LIMIT = 10;
-const TABS: { value: TAB; label: string }[] = [
-  { value: 'CONSULT', label: '서비스 도입' },
-  { value: 'USAGE', label: '서비스 이용' },
+const TABS: { type: TAB; name: string }[] = [
+  { type: 'CONSULT', name: '서비스 도입' },
+  { type: 'USAGE', name: '서비스 이용' },
 ];
 
 const FAQContents = () => {
-  const [tab, setTab] = useState<TAB>('CONSULT');
+  const [curActivetab, setActiveTab] = useState<TAB>('CONSULT');
   const [faqCategoryID, setFaqCategoryID] = useState('');
 
   const { onSearch, resetSearch, searchInputRef, searchValue, isInputFilled, setIsInputFilled } =
     useSearch();
 
-  const { data: categoryMenuList } = useCategoryMenuList(tab);
+  const { data: categoryMenuList } = useCategoryMenuList(curActivetab);
   const {
     data: faqList,
     hasNextPage,
     fetchNextPage,
-  } = useFAQList({ limit: LIMIT, tab, faqCategoryID, question: searchValue });
-
-  console.log(faqList);
+  } = useFAQList({ limit: LIMIT, tab: curActivetab, faqCategoryID, question: searchValue });
 
   return (
     <div>
       <ul className="flex mb-[var(--px-lg)] text-[length:var(--tab-fsize)] min-h-[var(--btn-xlg2)]">
-        {TABS.map((tabInfo) => (
+        {TABS.map((tab) => (
           <li
-            key={tabInfo.value}
+            key={tab.type}
             className={cn(
               'border font-semibold relative flex-1 min-h-[var(--btn-xlg2)] flex justify-center items-center',
-              tabInfo.value === tab
+              tab.type === curActivetab
                 ? 'bg-midnight-900 border-midnight-900 text-white font-semibold'
                 : 'bg-white border-midnight-100 text-black font-normal'
             )}
             onClick={() => {
-              setTab(tabInfo.value);
+              setActiveTab(tab.type);
               setFaqCategoryID('');
               resetSearch();
             }}
           >
-            {tabInfo.label}
+            {tab.name}
           </li>
         ))}
       </ul>
@@ -167,11 +165,11 @@ const FAQContents = () => {
         }
         return (
           <FAQList>
-            {faqList?.pages.map((page) => {
-              return page.items.map((item) => {
-                return <FAQList.Item key={item.id} {...item} tab={tab} />;
-              });
-            })}
+            {faqList?.pages.flatMap((page) =>
+              page.items.map((item) => (
+                <FAQList.Item key={item.id} curActivetab={curActivetab} {...item} />
+              ))
+            )}
             {hasNextPage && (
               <button
                 className="flex items-center justify-center text-[var(--list-more-size)] h-[var(--btn-xlg2)] mt-[calc(var(--px-lg)-8px)] w-full cursor-pointer"

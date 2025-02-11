@@ -30,14 +30,14 @@ const Items = ({
   answer,
   categoryName,
   subCategoryName,
-  tab,
+  curActivetab,
 }: {
   id: number;
   question: string;
   answer: string;
   categoryName: string;
   subCategoryName: string;
-  tab: TAB;
+  curActivetab: TAB;
 }) => {
   const { openId, toggleItem, faqItemRefs } =
     useContext<FAQListToggleContext>(FAQListToggleContext);
@@ -52,7 +52,7 @@ const Items = ({
           {categoryName}
         </span>
 
-        {tab === 'USAGE' && (
+        {curActivetab === 'USAGE' && (
           <span className="text-gray-500 mr-2 px-[var(--faq-list-a-padding-h)] w-[6em] font-normal text-center">
             {subCategoryName}
           </span>
