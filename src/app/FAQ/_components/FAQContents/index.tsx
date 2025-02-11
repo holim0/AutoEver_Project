@@ -73,9 +73,8 @@ const FAQContents = () => {
           />
           {isInputFilled && (
             <button
+              type="button"
               className="absolute top-0 flex items-center h-full right-[calc(-1px+var(--btn-xlg2))]"
-              type="submit"
-              form="search-form"
               onClick={() => {
                 if (searchInputRef.current) {
                   searchInputRef.current.value = '';
