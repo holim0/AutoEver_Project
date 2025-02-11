@@ -14,6 +14,7 @@ import useSearch from './hooks/useSearch';
 import NoData from '../NoData';
 
 import type { TAB } from './types';
+import FAQCategory from '../FAQCategory';
 
 const LIMIT = 10;
 const TABS: { type: TAB; name: string }[] = [
@@ -112,51 +113,25 @@ const FAQContents = () => {
         </div>
       )}
 
-      <div className="mb-[var(--px-md)]">
-        <ul className="flex flex-wrap">
-          <label className="relative cursor-pointer h-[var(--btn-md)]">
-            <input
-              type="radio"
-              name="filter"
-              checked={faqCategoryID === ''}
-              onChange={() => setFaqCategoryID('')}
-              className="hidden"
+      <FAQCategory>
+        <FAQCategory.Item
+          name="전체"
+          isChecked={faqCategoryID === ''}
+          onChange={() => setFaqCategoryID('')}
+        />
+        {categoryMenuList?.map((categoryMenu) => {
+          const { categoryID, name } = categoryMenu;
+          const isChecked = categoryID === faqCategoryID;
+          return (
+            <FAQCategory.Item
+              key={categoryID}
+              name={name}
+              isChecked={isChecked}
+              onChange={() => setFaqCategoryID(categoryID)}
             />
-            <span
-              className={cn(
-                'flex items-center px-[var(--space-sm)] transition-all rounded-full font-semibold h-full',
-                faqCategoryID === '' ? 'bg-mint-900 text-white' : 'text-gray-900'
-              )}
-            >
-              전체
-            </span>
-          </label>
-          {categoryMenuList?.map((categoryMenu) => {
-            const { categoryID } = categoryMenu;
-            const isActive = categoryID === faqCategoryID;
-            return (
-              <label key={categoryID} className="relative cursor-pointer h-[var(--btn-md)]">
-                <input
-                  type="radio"
-                  name="tab"
-                  value={categoryID}
-                  checked={isActive}
-                  onChange={() => setFaqCategoryID(categoryID)}
-                  className="hidden"
-                />
-                <span
-                  className={cn(
-                    'flex items-center px-[var(--space-sm)] transition-all rounded-full h-full font-semibold',
-                    isActive ? 'bg-mint-900 text-white' : 'text-gray-900'
-                  )}
-                >
-                  {categoryMenu.name}
-                </span>
-              </label>
-            );
-          })}
-        </ul>
-      </div>
+          );
+        })}
+      </FAQCategory>
 
       {(() => {
         const isEmpty = !faqList || faqList.pages.every((page) => page.items.length === 0);
