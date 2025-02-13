@@ -77,7 +77,15 @@ export const handlers = [
     const { limit, offset, tab, faqCategoryID, question } = parsedFaqQueryParams.data;
 
     const filteredFaqData = faq[tab as FAQ_CATEGORY_KEY]
-      .filter((data) => !faqCategoryID || data.categoryName === categoryIdToName(faqCategoryID))
+      .filter((data) => {
+        const categoryFilter =
+          !faqCategoryID ||
+          (tab === 'CONSULT'
+            ? data.subCategoryName === categoryIdToName(faqCategoryID)
+            : data.categoryName === categoryIdToName(faqCategoryID));
+
+        return categoryFilter;
+      })
       .filter((data) =>
         !question
           ? true

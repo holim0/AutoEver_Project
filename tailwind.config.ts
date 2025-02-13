@@ -8,6 +8,12 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        sm: { max: '743px' },
+        md: { min: '744px', max: '1023px' },
+        lg: { min: '1024px', max: '1439px' },
+        xl: { min: '1440px' },
+      },
       colors: {
         red: '#ff0900',
         blue: '#4296e4',
