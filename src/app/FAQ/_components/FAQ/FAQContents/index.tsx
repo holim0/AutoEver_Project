@@ -15,6 +15,7 @@ import NoData from '../../NoData';
 
 import type { TAB } from './types';
 import FAQCategory from '../FAQCategory';
+import ModalProvider from '@/components/Modal/ModalProvider';
 
 const LIMIT = 10;
 const TABS: { type: TAB; name: string }[] = [
@@ -22,7 +23,7 @@ const TABS: { type: TAB; name: string }[] = [
   { type: 'USAGE', name: '서비스 이용' },
 ];
 
-const FAQContents = () => {
+const FAQContentsComponent = () => {
   const [curActivetab, setActiveTab] = useState<TAB>('CONSULT');
   const [faqCategoryID, setFaqCategoryID] = useState('');
 
@@ -156,6 +157,14 @@ const FAQContents = () => {
         );
       })()}
     </div>
+  );
+};
+
+const FAQContents = () => {
+  return (
+    <ModalProvider>
+      <FAQContentsComponent />
+    </ModalProvider>
   );
 };
 

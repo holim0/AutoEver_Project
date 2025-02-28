@@ -68,6 +68,7 @@ export default function RootLayout({
         <MSWWrapper>
           <QueryProvider>{children}</QueryProvider>
         </MSWWrapper>
+        <div id="modal-root" />
       </body>
     </html>
   );
