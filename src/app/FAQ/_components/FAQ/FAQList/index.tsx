@@ -1,10 +1,13 @@
 import Image from 'next/image';
-import { ReactNode, useContext, createContext, RefObject } from 'react';
+import { useContext, createContext, RefObject, useEffect } from 'react';
 
 import useFAQListToggle from './useFAQListToggle';
 import ArrowIcon from '@/assets/ic_arrow.svg';
 
 import type { TAB } from '../FAQContents/types';
+import { useFAQList } from '../FAQContents/hooks/useDataQueries';
+import NoData from '../../NoData';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 interface FAQListToggleContext {
   openId: number | null;
@@ -14,12 +17,54 @@ interface FAQListToggleContext {
 
 const FAQListToggleContext = createContext<FAQListToggleContext>({} as FAQListToggleContext);
 
-const FAQList = ({ children }: { children: ReactNode }) => {
+interface FAQListProps {
+  limit: number;
+  tab: TAB;
+  faqCategoryID: string;
+  question: string;
+  onTotalRecordsChange: (totalRecords: number) => void;
+}
+
+const FAQList = ({ limit, tab, faqCategoryID, question, onTotalRecordsChange }: FAQListProps) => {
   const FAQListToggleState = useFAQListToggle();
+  const {
+    isLoading,
+    isFetchingNextPage,
+    data: faqList,
+    hasNextPage,
+    fetchNextPage,
+  } = useFAQList({ limit, tab, faqCategoryID, question });
+
+  useEffect(() => {
+    if (faqList?.pages[0]?.pageInfo?.totalRecord) {
+      onTotalRecordsChange(faqList.pages[0].pageInfo.totalRecord);
+    } else {
+      onTotalRecordsChange(0);
+    }
+  }, [faqList, onTotalRecordsChange]);
+
+  const isEmpty = !faqList || faqList.pages.every((page) => page.items.length === 0);
+
+  if (isEmpty && !isLoading) {
+    return <NoData />;
+  }
 
   return (
     <FAQListToggleContext.Provider value={FAQListToggleState}>
-      <ul className="border-t-2 border-t-[var(--midnight-900)]">{children}</ul>
+      <ul className="border-t-2 border-t-[var(--midnight-900)]">
+        {faqList?.pages.flatMap((page) =>
+          page.items.map((item) => <FAQList.Item key={item.id} curActivetab={tab} {...item} />)
+        )}
+      </ul>
+      {isFetchingNextPage && <LoadingSpinner />}
+      {hasNextPage && (
+        <button
+          className="flex items-center justify-center text-[var(--list-more-size)] h-[var(--btn-xlg2)] mt-[calc(var(--px-lg)-8px)] w-full cursor-pointer"
+          onClick={() => fetchNextPage()}
+        >
+          + 더보기
+        </button>
+      )}
     </FAQListToggleContext.Provider>
   );
 };
@@ -67,11 +112,12 @@ const Items = ({
             </>
           )}
         </div>
+
         <strong className="flex-1 text-[length:var(--faq-list-a-size)] pl-[var(--faq-list-a-padding-h)]">
           {question}
         </strong>
         <Image
-          className={`absolute right-3 size-[var(--ic-md)] transition-transform duration-300 [transition-timing-function:cubic-bezier(1,0,0.2,1)] ${openId === id ? 'rotate-180' : ''}`}
+          className={`absolute right-3 top-1/2 -translate-y-1/2 size-[var(--ic-md)] transition-transform duration-300 [transition-timing-function:cubic-bezier(1,0,0.2,1)] ${openId === id ? 'rotate-180' : ''}`}
           src={ArrowIcon}
           alt="Expand Arrow Icon"
           priority

@@ -49,7 +49,39 @@ export default {
       transitionTimingFunction: {
         'menu-cubic': 'cubic-bezier(1, 0, 0.2, 1)',
       },
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
+      },
+      keyframes: {
+        pulse: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.5' },
+        },
+      },
+      animationDelay: {
+        '0': '0ms',
+        '150': '150ms',
+        '300': '300ms',
+        '450': '450ms',
+        '600': '600ms',
+      },
+      borderWidth: {
+        '3': '3px',
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities, theme }: { addUtilities: any; theme: any }) {
+      const animationDelays = theme('animationDelay', {});
+      const utilities = Object.entries(animationDelays).map(([key, value]) => {
+        return {
+          [`.animation-delay-${key}`]: {
+            'animation-delay': value,
+          },
+        };
+      });
+      
+      addUtilities(utilities);
+    },
+  ],
 } satisfies Config;

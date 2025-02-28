@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
 import { getCategoryMenuList, getFAQList } from '../api';
 
@@ -21,7 +21,7 @@ export const useFAQList = ({
   faqCategoryID?: string;
   question?: string;
 }) => {
-  return useInfiniteQuery({
+  return useSuspenseInfiniteQuery({
     queryKey: ['FAQList', tab, faqCategoryID, question],
     queryFn: async ({ pageParam = 0 }) =>
       getFAQList({

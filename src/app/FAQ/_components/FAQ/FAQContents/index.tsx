@@ -1,23 +1,22 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
 import { cn } from '@/utils/cn';
-import { useCategoryMenuList, useFAQList } from './hooks/useDataQueries';
+import { useCategoryMenuList } from './hooks/useDataQueries';
 import SearchIcon from '@/assets/ic_search.svg';
 import ClearIcon from '@/assets/ic_clear.svg';
 import ResetIcon from '@/assets/ic_init.svg';
 import FAQList from '../FAQList';
 
 import useSearch from './hooks/useSearch';
-import NoData from '../../NoData';
 
 import type { TAB } from './types';
 import FAQCategory from '../FAQCategory';
 import ModalProvider from '@/components/Modal/ModalProvider';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
-const LIMIT = 10;
 const TABS: { type: TAB; name: string }[] = [
   { type: 'CONSULT', name: '서비스 도입' },
   { type: 'USAGE', name: '서비스 이용' },
@@ -26,16 +25,12 @@ const TABS: { type: TAB; name: string }[] = [
 const FAQContentsComponent = () => {
   const [curActivetab, setActiveTab] = useState<TAB>('CONSULT');
   const [faqCategoryID, setFaqCategoryID] = useState('');
+  const [totalRecords, setTotalRecords] = useState(0);
 
   const { onSearch, resetSearch, searchInputRef, searchValue, isInputFilled, setIsInputFilled } =
     useSearch();
 
   const { data: categoryMenuList } = useCategoryMenuList(curActivetab);
-  const {
-    data: faqList,
-    hasNextPage,
-    fetchNextPage,
-  } = useFAQList({ limit: LIMIT, tab: curActivetab, faqCategoryID, question: searchValue });
 
   return (
     <div>
@@ -99,8 +94,7 @@ const FAQContentsComponent = () => {
       {searchValue && (
         <div className="flex justify-between text-[length:var(--heading-info)] my-[var(--px-md)]">
           <h2 className="font-bold">
-            검색결과 총{' '}
-            <em className="text-mint-900 not-italic">{faqList?.pages[0].pageInfo.totalRecord}</em>건
+            검색결과 총 <em className="text-mint-900 not-italic">{totalRecords}</em>건
           </h2>
           <button
             className="flex items-center text-[16px]"
@@ -133,29 +127,15 @@ const FAQContentsComponent = () => {
         })}
       </FAQCategory>
 
-      {(() => {
-        const isEmpty = !faqList || faqList.pages.every((page) => page.items.length === 0);
-        if (isEmpty) {
-          return <NoData />;
-        }
-        return (
-          <FAQList>
-            {faqList?.pages.flatMap((page) =>
-              page.items.map((item) => (
-                <FAQList.Item key={item.id} curActivetab={curActivetab} {...item} />
-              ))
-            )}
-            {hasNextPage && (
-              <button
-                className="flex items-center justify-center text-[var(--list-more-size)] h-[var(--btn-xlg2)] mt-[calc(var(--px-lg)-8px)] w-full cursor-pointer"
-                onClick={() => fetchNextPage()}
-              >
-                + 더보기
-              </button>
-            )}
-          </FAQList>
-        );
-      })()}
+      <Suspense fallback={<LoadingSpinner />}>
+        <FAQList
+          limit={10}
+          tab={curActivetab}
+          faqCategoryID={faqCategoryID}
+          question={searchValue}
+          onTotalRecordsChange={setTotalRecords}
+        />
+      </Suspense>
     </div>
   );
 };

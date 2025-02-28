@@ -1,10 +1,13 @@
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse, delay } from 'msw';
 import { z } from 'zod';
 import { categoryIdToName, createErrorResponse, getNextOffset } from './utils';
 
 import faqCategory from './data/faq-categroy.json';
 import faq from './data/faq.json';
 import terms from './data/terms.json';
+
+// 응답 지연 시간 (밀리초)
+const RESPONSE_DELAY = 1000;
 
 type FAQ_CATEGORY_KEY = keyof typeof faqCategory;
 type TERMS_KEY = keyof typeof terms;
@@ -47,7 +50,10 @@ const faqQuerySchema = z.object({
 
 export const handlers = [
   // 카테고리 리스트 API
-  http.get('/api/faq/category', ({ request }) => {
+  http.get('/api/faq/category', async ({ request }) => {
+    // 2초 지연
+    await delay(RESPONSE_DELAY);
+
     const url = new URL(request.url);
     const tab = url.searchParams.get('tab');
 
@@ -61,7 +67,10 @@ export const handlers = [
     return HttpResponse.json(categoryList);
   }),
 
-  http.get('/api/faq', ({ request }) => {
+  http.get('/api/faq', async ({ request }) => {
+    // 2초 지연
+    await delay(RESPONSE_DELAY);
+
     const url = new URL(request.url);
     const faqQueryParams = Object.fromEntries(url.searchParams.entries());
 
@@ -108,7 +117,10 @@ export const handlers = [
     });
   }),
   // 이용 약관 API
-  http.get('/api/terms', ({ request }) => {
+  http.get('/api/terms', async ({ request }) => {
+    // 2초 지연
+    await delay(RESPONSE_DELAY);
+
     const url = new URL(request.url);
     const termsClassID = url.searchParams.get('termsClassID');
 
