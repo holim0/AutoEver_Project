@@ -46,6 +46,9 @@ export default {
       fontFamily: {
         kia: ['var(--font-kia)', 'Kia Signature Fix', 'Arial', 'Helvetica', 'sans-serif'],
       },
+      transitionTimingFunction: {
+        'menu-cubic': 'cubic-bezier(1, 0, 0.2, 1)',
+      },
     },
   },
   plugins: [],
